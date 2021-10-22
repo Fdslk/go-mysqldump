@@ -3,6 +3,7 @@ package mysqldump
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -188,6 +189,11 @@ func createTableSQL(db *sql.DB, name string) (string, error) {
 
 func createTableValues(db *sql.DB, name string) (string, error) {
 	// Get Data
+
+	if isNeedSkipFetchDataTable(name) {
+		fmt.Printf("Skip table %s", name)
+		return "", nil
+	}
 	rows, err := db.Query("SELECT * FROM " + name)
 	if err != nil {
 		return "", err
@@ -236,4 +242,17 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 	}
 
 	return strings.Join(data_text, ","), rows.Err()
+}
+
+func isNeedSkipFetchDataTable(tableName string) bool {
+	skipMap := map[string]bool{
+		"sys_log_operation": false,
+		"sys_log_err":       false,
+		"sys_log_login":     false,
+	}
+	if _, ok := skipMap[tableName]; ok {
+		return true
+	} else {
+		return false
+	}
 }

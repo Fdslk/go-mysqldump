@@ -335,3 +335,20 @@ UNLOCK TABLES;
 		t.Fatalf("expected %#v, got %#v", expected, result)
 	}
 }
+
+func TestSikpListOk(t *testing.T) {
+	tableName := "sys_log_operation"
+	result := isNeedSkipFetchDataTable(tableName)
+	expected := true
+	if !reflect.DeepEqual(expected, result) {
+		t.Fatalf("expected %t, got %t", expected, result)
+	}
+}
+func TestSikpListNotOk(t *testing.T) {
+	tableName := "tb_caipin"
+	result := isNeedSkipFetchDataTable(tableName)
+	expected := false
+	if !reflect.DeepEqual(expected, result) {
+		t.Fatalf("expected %t, got %t", expected, result)
+	}
+}
