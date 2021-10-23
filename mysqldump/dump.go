@@ -160,6 +160,7 @@ func createTable(db *sql.DB, name string) (*table, error) {
 	var err error
 	t := &table{Name: name}
 
+	fmt.Printf("-----------TableName %s-----------\n", name)
 	if t.SQL, err = createTableSQL(db, name); err != nil {
 		return nil, err
 	}
@@ -191,7 +192,7 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 	// Get Data
 
 	if isNeedSkipFetchDataTable(name) {
-		fmt.Printf("Skip table %s", name)
+		fmt.Printf("Skip table: %s for getting data", name)
 		return "", nil
 	}
 	rows, err := db.Query("SELECT * FROM " + name)
@@ -247,7 +248,7 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 func isNeedSkipFetchDataTable(tableName string) bool {
 	skipMap := map[string]bool{
 		"sys_log_operation": false,
-		"sys_log_err":       false,
+		"sys_log_error":     false,
 		"sys_log_login":     false,
 	}
 	if _, ok := skipMap[tableName]; ok {
