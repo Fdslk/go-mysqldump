@@ -158,7 +158,7 @@ func TestCreateTableValuesOk(t *testing.T) {
 		t.Errorf("there were unfulfilled expections: %s", err)
 	}
 
-	expectedResult := "('1','test@test.de','Test Name 1'),('2','test2@test.de','Test Name 2')"
+	expectedResult := "(\"1\",\"test@test.de\",\"Test Name 1\"),(\"2\",\"test2@test.de\",\"Test Name 2\")"
 
 	if !reflect.DeepEqual(result, expectedResult) {
 		t.Fatalf("expected %#v, got %#v", expectedResult, result)
@@ -190,7 +190,7 @@ func TestCreateTableValuesNil(t *testing.T) {
 		t.Errorf("there were unfulfilled expections: %s", err)
 	}
 
-	expectedResult := "('1',null,'Test Name 1'),('2','test2@test.de','Test Name 2'),('3','','Test Name 3')"
+	expectedResult := "(\"1\",null,\"Test Name 1\"),(\"2\",\"test2@test.de\",\"Test Name 2\"),(\"3\",\"\",\"Test Name 3\")"
 
 	if !reflect.DeepEqual(result, expectedResult) {
 		t.Fatalf("expected %#v, got %#v", expectedResult, result)
@@ -228,7 +228,7 @@ func TestCreateTableOk(t *testing.T) {
 	expectedResult := &table{
 		Name:   "Test_Table",
 		SQL:    "CREATE TABLE 'Test_Table' (`id` int(11) NOT NULL AUTO_INCREMENT,`s` char(60) DEFAULT NULL, PRIMARY KEY (`id`))ENGINE=InnoDB DEFAULT CHARSET=latin1",
-		Values: "('1',null,'Test Name 1'),('2','test2@test.de','Test Name 2')",
+		Values: "(\"1\",null,\"Test Name 1\"),(\"2\",\"test2@test.de\",\"Test Name 2\")",
 	}
 
 	if !reflect.DeepEqual(result, expectedResult) {
@@ -306,6 +306,10 @@ func TestDumpOk(t *testing.T) {
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE DATABASE localEmenu;
+
+USE localEmenu;
+
 
 
 --
@@ -324,7 +328,7 @@ CREATE TABLE 'Test_Table' (\id\ int(11) NOT NULL AUTO_INCREMENT,\email\ char(60)
 LOCK TABLES Test_Table WRITE;
 /*!40000 ALTER TABLE Test_Table DISABLE KEYS */;
 
-INSERT INTO Test_Table VALUES ('1',null,'Test Name 1'),('2','test2@test.de','Test Name 2');
+INSERT INTO Test_Table VALUES ("1",null,"Test Name 1"),("2","test2@test.de","Test Name 2");
 
 /*!40000 ALTER TABLE Test_Table ENABLE KEYS */;
 UNLOCK TABLES;
@@ -332,7 +336,7 @@ UNLOCK TABLES;
 `
 
 	if !reflect.DeepEqual(result, expected) {
-		t.Fatalf("expected %#v, got %#v", expected, result)
+		t.Fatalf("expected %#v, ç %#v", expected, result)
 	}
 }
 

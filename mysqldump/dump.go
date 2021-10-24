@@ -22,9 +22,12 @@ type dump struct {
 	ServerVersion string
 	Tables        []*table
 	CompleteTime  string
+	DBName        string
 }
 
 const version = "0.2.2"
+
+const dbname = "localEmenu"
 
 const tmpl = `-- Go SQL Dump {{ .DumpVersion }}
 --
@@ -41,6 +44,10 @@ const tmpl = `-- Go SQL Dump {{ .DumpVersion }}
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+CREATE DATABASE {{ .DBName }};
+
+USE {{ .DBName }};
 
 
 {{range .Tables}}
@@ -90,6 +97,7 @@ func (d *Dumper) Dump() (string, error) {
 	data := dump{
 		DumpVersion: version,
 		Tables:      make([]*table, 0),
+		DBName:      dbname,
 	}
 
 	// Get server version
@@ -233,7 +241,7 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 
 		for key, value := range data {
 			if value != nil && value.Valid {
-				dataStrings[key] = "'" + value.String + "'"
+				dataStrings[key] = "\"" + value.String + "\""
 			} else {
 				dataStrings[key] = "null"
 			}
@@ -247,9 +255,36 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 
 func isNeedSkipFetchDataTable(tableName string) bool {
 	skipMap := map[string]bool{
-		"sys_log_operation": false,
-		"sys_log_error":     false,
-		"sys_log_login":     false,
+		"sys_log_operation":        false,
+		"sys_log_error":            false,
+		"sys_log_login":            false,
+		"qrtz_blob_triggers":       false,
+		"qrtz_calendars":           false,
+		"qrtz_cron_triggers":       false,
+		"qrtz_fired_triggers":      false,
+		"qrtz_job_details":         false,
+		"qrtz_locks":               false,
+		"qrtz_paused_trigger_grps": false,
+		"qrtz_scheduler_state":     false,
+		"qrtz_simple_triggers":     false,
+		"qrtz_simprop_triggers":    false,
+		"qrtz_triggers":            false,
+		"schedule_job":             false,
+		"schedule_job_log":         false,
+		"sys_mail_log":             false,
+		"tb_dingdan":               false,
+		"tb_dingdan_caipin":        false,
+		"tb_zhangdan":              false,
+		"tb_dianpu_qianxiang":      false,
+		"tb_caipin_0307":           false,
+		"tb_caipin_0525":           false,
+		"sys_mail_template":        false,
+		"tb_printlog":              false,
+		"sys_sms":                  false,
+		"sys_sms_template":         false,
+		"sys_menu":                 false,
+		"sys_oss":                  false,
+		"sys_dict_language_copy1":  false,
 	}
 	if _, ok := skipMap[tableName]; ok {
 		return true

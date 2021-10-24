@@ -53,3 +53,8 @@ func main() {
 
 [![GoDoc](https://godoc.org/github.com/JamesStewy/go-mysqldump?status.svg)](https://godoc.org/github.com/JamesStewy/go-mysqldump)
 [![Build Status](https://travis-ci.org/JamesStewy/go-mysqldump.svg?branch=master)](https://travis-ci.org/JamesStewy/go-mysqldump)
+
+### features
+
+* 处理特出字符，再倒入dumps时，不会出现错误
+
