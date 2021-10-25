@@ -356,3 +356,21 @@ func TestSikpListNotOk(t *testing.T) {
 		t.Fatalf("expected %t, got %t", expected, result)
 	}
 }
+
+func TestSpecialCharactorProcessOK(t *testing.T) {
+	data := "you're a good person."
+	result := specialCharactorProcess(data)
+	expected := "you\\'re a good person."
+	if !reflect.DeepEqual(expected, result) {
+		t.Fatalf("expected %s, got %s", expected, result)
+	}
+}
+
+func TestSpecialCharactorProcessNotReplace(t *testing.T) {
+	data := "you are a \"good\" person."
+	result := specialCharactorProcess(data)
+	expected := data
+	if !reflect.DeepEqual(expected, result) {
+		t.Fatalf("expected %s, got %s", expected, result)
+	}
+}

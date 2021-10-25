@@ -241,7 +241,7 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 
 		for key, value := range data {
 			if value != nil && value.Valid {
-				dataStrings[key] = "'" + value.String + "'"
+				dataStrings[key] = "'" + specialCharactorProcess(value.String) + "'"
 			} else {
 				dataStrings[key] = "null"
 			}
@@ -251,6 +251,19 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 	}
 
 	return strings.Join(data_text, ","), rows.Err()
+}
+
+func specialCharactorProcess(data string) string {
+	var replacedData string = data
+	charactors := []string{
+		"'",
+	}
+	for _, val := range charactors {
+		if ok := strings.Contains(data, val); ok {
+			replacedData = strings.Replace(replacedData, val, fmt.Sprintf("\\%s", val), -1)
+		}
+	}
+	return replacedData
 }
 
 func isNeedSkipFetchDataTable(tableName string) bool {
