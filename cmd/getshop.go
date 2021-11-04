@@ -7,6 +7,11 @@ import (
 )
 
 func init() {
+	var dianpuId string
+
+	versionCmd.Flags().StringVarP(&dianpuId, "dianpuId", "d", "", "商店id的参数")
+	versionCmd.MarkFlagRequired("dianpuId")
+
 	rootCmd.AddCommand(versionCmd)
 }
 

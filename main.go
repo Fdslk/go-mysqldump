@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/dumpsql/mysqldump"
+	"github.com/dumpsql/cmd"
 )
 
 func main() {
-	mysqldump.DBBackup()
+	cmd.Execute()
 }
