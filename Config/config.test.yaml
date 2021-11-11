@@ -1,0 +1,6 @@
+database:
+  username : "root"
+  password : "1qaz2wsx"
+  hostname : "localhost"
+  port : 3306
+  dbname : "localEmenu"
