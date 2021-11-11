@@ -3,23 +3,25 @@ package mysqldump
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 
+	config "github.com/dumpsql/Config"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func DBBackup() {
 	// Open connection to database
-	username := "root"
-	password := "1qaz2wsx"
-	hostname := "localhost"
-	port := "3306"
-	dbname := "localEmenu"
+	dbConfig, _ := config.NewConfig("Config/config.yaml")
 
 	dumpDir := "." // you should create this directory
 
 	dumpFilenameFormat := fmt.Sprintf("%s-20060102T150405", dbname) // accepts time layout string and add .sql at the end of file
 
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, hostname, port, dbname))
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+		dbConfig.DataBase.UserName,
+		dbConfig.DataBase.PassWord,
+		dbConfig.DataBase.HostName,
+		strconv.Itoa(dbConfig.DataBase.Port), dbname))
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
 		return

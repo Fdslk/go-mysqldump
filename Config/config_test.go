@@ -12,7 +12,7 @@ func TestGetConfigSuccess(t *testing.T) {
 			UserName string `yaml:"username"`
 			PassWord string `yaml:"password"`
 			HostName string `yaml:"hostname"`
-			Port     int16  `yaml:"port"`
+			Port     int    `yaml:"port"`
 			Dbname   string `yaml:"dbname"`
 		}{
 			UserName: "root",
